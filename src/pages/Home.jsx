@@ -1,11 +1,31 @@
-import React, { useContext } from "react";
-import { DataProvider } from "../Providers/DataContext";
+import { useGetProductsQuery } from "../redux/api/productsApi/productsApi";
+
 
 const Home = () => {
-  const { data } = useContext(DataProvider);
-  console.log(data); // This will log the data from the context
+  const { data, loading, error } = useGetProductsQuery()
 
-  return <div>This is the home page</div>;
+if(loading){
+
+  return(
+
+    <div>
+
+      loading ..
+    </div>
+  )
+}
+
+  if (error) {
+    return (
+      <div>
+        Error: {error.message}
+      </div>
+    );
+  }
+
+  console.log(data);
+
+  return (<div>This is the home page</div>)
 };
 
 export default Home;

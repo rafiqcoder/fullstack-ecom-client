@@ -10,6 +10,8 @@ import Checkout from "./pages/Checkout";
 import NotFound from "./components/NotFound";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
           <Route index element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="*" element={<NotFound />} />

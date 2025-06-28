@@ -3,7 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Layout from "./components/Layout";
+import Layout from "./components/Layout/Layout";
 import Home from "./pages/Home";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -12,6 +12,10 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import DashboardLayout from "./components/Layout/DashboardLayout";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import PrivateRoute from "./PrivateRoute/PrivateRoute";
+import AddProduct from "./pages/Dashboard/AddProduct";
 
 function App() {
   return (
@@ -26,6 +30,17 @@ function App() {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:id" element={<ProductDetails />} />
           <Route path="*" element={<NotFound />} />
+        </Route>
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <DashboardLayout />
+            </PrivateRoute>
+          }
+        >
+          <Route index element={<Dashboard />} />
+          <Route path="add-product" element={<AddProduct />} />
         </Route>
       </Routes>
     </BrowserRouter>

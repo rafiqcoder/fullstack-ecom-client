@@ -1,16 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase.config";
+import { Navigate, useLocation, useNavigate } from "react-router";
+import { useGenerateJwtMutation } from "../redux/api/usersApi/usersApi";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
+  const [generateJwt, { isLoading }] = useGenerateJwtMutation();
+
+  const [loading, setLoading] = useState(false);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const from = location.state?.from?.pathname || "/";
+
+  console.log("location", location.state?.from?.pathname);
+
   const provider = new GoogleAuthProvider();
   const onSubmit = (data) => {
     alert("Form submitted successfully!");
     console.log(data);
   };
   const handleGoogleSignIn = () => {
+    setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -18,9 +30,23 @@ const Login = () => {
         const token = credential.accessToken;
         // The signed-in user info.
         const user = result.user;
-
-        console.log("user", user);
-
+        if (user && user.email) {
+          generateJwt(user.email)
+            .unwrap()
+            .then(({ token }) => {
+              console.log("token from login page", token);
+              // navigate(from, { replace: true });
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.log(error);
+              setLoading(false);
+            });
+          console.log("user", user);
+        } else {
+          console.log("user email not found");
+          setLoading(false);
+        }
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       })
@@ -30,14 +56,20 @@ const Login = () => {
         const errorMessage = error.message;
         // The email of the user's account used.
         console.log(error);
-
+        setLoading(false);
         const email = error.customData.email;
         // The AuthCredential type that was used.
         const credential = GoogleAuthProvider.credentialFromError(error);
         // ...
       });
   };
-
+  if (loading || isLoading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="loader text-white"> Loading</div>
+      </div>
+    );
+  }
   return (
     <div>
       <div className="w-full max-w-md p-4 rounded-md shadow sm:p-8 dark:bg-gray-50 dark:text-gray-800 mx-auto my-10">

@@ -14,6 +14,7 @@ const Header = () => {
     { name: "Checkout", path: "/checkout" },
     { name: "Login", path: "/login" },
     { name: "Register", path: "/register" },
+    { name: "Dashboard", path: "/dashboard" },
   ];
 
   const handleLogout = () => {

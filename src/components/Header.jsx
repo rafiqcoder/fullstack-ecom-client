@@ -6,7 +6,7 @@ import { auth } from "../../firebase.config";
 import { useLogoutMutation } from "../redux/api/usersApi/usersApi";
 
 /**
- * Tutorial: Header Component with Cart UI (No Functionality)
+ *   Header Component with Cart UI (No Functionality)
  *
  * This component demonstrates:
  * 1. Modern cart UI with popup/dropdown (UI ONLY)
@@ -23,11 +23,11 @@ const Header = () => {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 
-  // Tutorial: Cart UI state (NO REDUX FUNCTIONALITY)
+  //   Cart UI state (NO REDUX FUNCTIONALITY)
   // Just for controlling popup visibility
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Tutorial: Mock cart data for UI demonstration only
+  //   Mock cart data for UI demonstration only
   // This shows how the cart UI would look with real data
   const mockCartItems = [
     {
@@ -56,7 +56,7 @@ const Header = () => {
     },
   ];
 
-  // Tutorial: Calculate display values from mock data
+  //   Calculate display values from mock data
   const displayItemsCount = mockCartItems.reduce(
     (total, item) => total + item.quantity,
     0
@@ -161,7 +161,7 @@ const Header = () => {
         </div>
         <div className="navbar-end">
           <div className="flex-none">
-            {/* Tutorial: Cart Icon with Popup - Modern E-commerce UI */}
+            {/*   Cart Icon with Popup - Modern E-commerce UI */}
             <div className="dropdown dropdown-end">
               <div
                 tabIndex={0}
@@ -192,7 +192,7 @@ const Header = () => {
                 </div>
               </div>
 
-              {/* Tutorial: Cart Popup - UI ONLY (No Real Functionality) */}
+              {/*   Cart Popup - UI ONLY (No Real Functionality) */}
               <div
                 tabIndex={0}
                 className="card card-compact dropdown-content bg-white z-[999] mt-3 w-90 shadow-xl border border-gray-200 rounded-lg"
@@ -214,7 +214,7 @@ const Header = () => {
                     </div>
                   ) : (
                     <>
-                      {/* Tutorial: Cart Items List */}
+                      {/*   Cart Items List */}
                       <div className="space-y-3 max-h-64 ">
                         {mockCartItems.map((item) => (
                           <div
@@ -238,7 +238,7 @@ const Header = () => {
                               <p className="font-semibold text-sm text-gray-800">
                                 ${(item.price * item.quantity).toFixed(2)}
                               </p>
-                              {/* Tutorial: Remove Item Button (UI Only) */}
+                              {/*   Remove Item Button (UI Only) */}
                               <button
                                 className="btn btn-ghost btn-xs text-red-500 hover:bg-red-50 p-1"
                                 onClick={() =>
@@ -268,7 +268,7 @@ const Header = () => {
                         ))}
                       </div>
 
-                      {/* Tutorial: Cart Summary */}
+                      {/*   Cart Summary */}
                       <div className="border-t border-gray-200 pt-3 mt-3">
                         <div className="flex justify-between items-center mb-3">
                           <span className="font-semibold text-gray-800">
@@ -279,7 +279,7 @@ const Header = () => {
                           </span>
                         </div>
 
-                        {/* Tutorial: Cart Action Buttons */}
+                        {/*   Cart Action Buttons */}
                         <div className="flex gap-2">
                           <NavLink
                             to="/cart"
@@ -300,7 +300,7 @@ const Header = () => {
                     </>
                   )}
 
-                  {/* Tutorial: UI Demo Notice */}
+                  {/*   UI Demo Notice */}
                   <div className="mt-3 p-2 bg-yellow-50 border border-yellow-200 rounded-lg">
                     <p className="text-xs text-yellow-700 text-center">
                       <strong>UI Demo:</strong> This cart contains mock data for

@@ -2,16 +2,17 @@ import React from "react";
 import { useAuth } from "../hooks/auth";
 import { Navigate, useLocation } from "react-router";
 import { useNavigate } from "react-router";
+import { useIsAdmin } from "../hooks/isAdmin";
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading } = useAuth();
+  const { isAdmin, isAdminLoading } = useIsAdmin();
   const location = useLocation();
 
-  if (loading) {
+  if (isAdminLoading) {
     return <div>loading</div>;
-    }
-    
-  if (user && user?.uid) {
+  }
+
+  if (isAdmin) {
     return children;
   }
 

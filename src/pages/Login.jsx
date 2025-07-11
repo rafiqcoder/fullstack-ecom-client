@@ -3,11 +3,15 @@ import { useForm } from "react-hook-form";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase.config";
 import { Navigate, useLocation, useNavigate } from "react-router";
-import { useGenerateJwtMutation } from "../redux/api/usersApi/usersApi";
+import {
+  useAddUserMutation,
+  useGenerateJwtMutation,
+} from "../redux/api/usersApi/usersApi";
 
 const Login = () => {
   const { register, handleSubmit } = useForm();
   const [generateJwt, { isLoading }] = useGenerateJwtMutation();
+  const [addUser, { isLoading: isAddingUser }] = useAddUserMutation();
 
   const [loading, setLoading] = useState(false);
   const location = useLocation();
@@ -25,8 +29,26 @@ const Login = () => {
     setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
-        setLoading(false);
-        navigate(from, { replace: true });
+        // const user = userCredential.user;
+        const userDetails = result.user;
+        if (userDetails && userDetails.email) {
+          const userData = {
+            email: userDetails.email,
+            name: userDetails.displayName || "Guest",
+          };
+          addUser(userData)
+            .unwrap()
+            .then(() => {
+              setLoading(false);
+              console.log("User added successfully!");
+
+              navigate(from, { replace: true });
+            })
+            .catch((error) => {
+              console.error("Failed to add user:", error);
+              setLoading(false);
+            });
+        }
       })
       .catch((error) => {
         // Handle Errors here.

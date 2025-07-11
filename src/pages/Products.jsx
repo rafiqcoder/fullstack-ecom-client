@@ -4,7 +4,7 @@ import { useGetProductsQuery } from "../redux/api/productsApi/productsApi";
 import HeroSlider from "../components/HeroSlider";
 
 const Products = () => {
-    const { data: products = [], isLoading, error } = useGetProductsQuery();
+    const { data, isLoading, error } = useGetProductsQuery();
     
     const navigate = useNavigate();
     
@@ -56,50 +56,13 @@ const Products = () => {
   ];
 
   // Mock products for demonstration if API fails
-  const mockProducts = [
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 99.99,
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-      rating: 4.5,
-      category: "Electronics",
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      price: 199.99,
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-      rating: 4.8,
-      category: "Electronics",
-    },
-    {
-      id: 3,
-      name: "Coffee Mug",
-      price: 15.99,
-      image:
-        "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?w=300&h=300&fit=crop",
-      rating: 4.2,
-      category: "Home",
-    },
-    {
-      id: 4,
-      name: "Laptop Stand",
-      price: 45.99,
-      image:
-        "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=300&h=300&fit=crop",
-      rating: 4.6,
-      category: "Office",
-    },
-  ];
+ 
   // handle click to redirect to details page
   const handleRedirect = (productId) => {
     navigate(`/product/${productId}`);
   };
 
-  const displayProducts = products.length > 0 ? products : mockProducts;
+  // const displayProducts = products.length > 0 ? products : mockProducts;
 
   if (isLoading) {
     return (
@@ -148,7 +111,7 @@ const Products = () => {
 
           {/* Products Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {displayProducts.map((product, index) => (
+            {data.data.map((product, index) => (
               <div
                 key={product.id}
                 className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 group"

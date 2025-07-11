@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// Tutorial: Cart Slice - Basic structure for future implementation
+//  Cart Slice - Basic structure for future implementation
 // This is a placeholder for cart functionality that will be implemented later
 const cartSlice = createSlice({
   name: "cart",
@@ -18,7 +18,7 @@ const cartSlice = createSlice({
   },
 });
 
-// Tutorial: Export actions when implemented
+//   Export actions when implemented
 export const {
   addItemToCart,
   removeItemFromCart,

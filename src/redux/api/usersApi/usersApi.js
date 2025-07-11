@@ -17,7 +17,26 @@ export const usersApi = apiSlice.injectEndpoints({
         method: "POST",
       }),
     }),
+    addUser: build.mutation({
+      query: (user) => ({
+        url: "users",
+        method: "POST",
+        body: JSON.stringify(user), // Ensure the body is a JSON string
+      }),
+      invalidatesTags: ["User"],
+    }),
+    getAdmin: build.mutation({
+      query: (email) => ({
+        url: `users/admin/${email}`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
-export const { useGenerateJwtMutation, useLogoutMutation } = usersApi;
+export const {
+  useGenerateJwtMutation,
+  useLogoutMutation,
+  useAddUserMutation,
+  useGetAdminMutation,
+} = usersApi;

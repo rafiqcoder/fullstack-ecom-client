@@ -1,37 +1,15 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import {
+  useDeleteProductsMutation,
+  useGetProductsQuery,
+} from "../../redux/api/productsApi/productsApi";
 
 const AllProducts = () => {
+  const { data, isLoading, error } = useGetProductsQuery();
+  const [deleteProducts, { isLoading: isDeleting }] =
+    useDeleteProductsMutation();
   // Fake products data for teaching CRUD operations
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Wireless Headphones",
-      price: 99.99,
-      stock: 50,
-      description: "High-quality wireless headphones with noise cancellation",
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
-    },
-    {
-      id: 2,
-      name: "Smart Watch",
-      price: 199.99,
-      stock: 25,
-      description: "Feature-rich smartwatch with health monitoring",
-      image:
-        "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
-    },
-    {
-      id: 3,
-      name: "Coffee Mug",
-      price: 15.99,
-      stock: 100,
-      description: "Ceramic coffee mug with heat retention",
-      image:
-        "https://images.unsplash.com/photo-1514228742587-6b1558fcf93a?w=300&h=300&fit=crop",
-    },
-  ]);
 
   // State for edit modal
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -47,13 +25,6 @@ const AllProducts = () => {
     reset,
     setValue,
   } = useForm();
-
-  // Filter products based on search
-  const filteredProducts = products.filter(
-    (product) =>
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   // CRUD Operations for teaching purposes
 
@@ -71,13 +42,14 @@ const AllProducts = () => {
 
   // DELETE: Remove product
   const handleDelete = async (productId) => {
+    console.log("Deleting product with ID:", productId);
     if (window.confirm("Are you sure you want to delete this product?")) {
       setLoading(true);
       try {
         // TODO: Replace with actual API call
-        // await deleteProduct(productId);
+        const response = await deleteProducts(productId);
+        console.log(response);
 
-        setProducts(products.filter((product) => product.id !== productId));
         alert("Product deleted successfully!");
       } catch (error) {
         console.error("Error deleting product:", error);
@@ -96,16 +68,6 @@ const AllProducts = () => {
       // await updateProduct(editingProduct.id, data);
 
       // Update local state
-      setProducts(
-        products.map((product) =>
-          product.id === editingProduct.id
-            ? {
-                ...product,
-                ...data
-              }
-            : product
-        )
-      );
 
       setIsEditModalOpen(false);
       setEditingProduct(null);
@@ -126,6 +88,21 @@ const AllProducts = () => {
     reset();
   };
 
+  if (isLoading || loading || isDeleting) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="loader">Loading ...</div>
+      </div>
+    );
+  }
+
+  // Filter products based on search
+  const filteredProducts = data?.data?.filter(
+    (product) =>
+      product?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product?.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  console.log("product from all product", data);
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
@@ -168,7 +145,7 @@ const AllProducts = () => {
 
             {/* Results Count */}
             <div className="flex items-center text-sm text-gray-600">
-              {filteredProducts.length} of {products.length} products
+              {filteredProducts.length} of {data.data.length} products
             </div>
           </div>
         </div>
@@ -225,7 +202,7 @@ const AllProducts = () => {
                     Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(product.id)}
+                    onClick={() => handleDelete(product._id)}
                     disabled={loading}
                     className="flex-1 bg-red-600 text-white py-2 px-3 rounded-md text-sm font-medium hover:bg-red-700 focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors disabled:opacity-50"
                   >

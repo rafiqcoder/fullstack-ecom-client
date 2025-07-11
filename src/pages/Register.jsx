@@ -2,20 +2,42 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { auth } from "../../firebase.config";
+import { useAddUserMutation } from "../redux/api/usersApi/usersApi";
+
 const Register = () => {
   const [loading, setLoading] = React.useState(false);
+  const [addUser, { isLoading }] = useAddUserMutation();
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     setLoading(true);
-    const { email, password } = data;
+    const { email, password, fullName } = data;
     console.log("data", data);
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         // Signed up
         const user = userCredential.user;
+        if (user && user.email) {
+          const userData = {
+            email: user.email,
+            name: fullName,
+            isAdmin: true,
+          };
+          addUser(userData)
+            .unwrap()
+            .then(() => {
+              setLoading(false);
+              console.log("User added successfully!");
+            })
+            .catch((error) => {
+              console.error("Failed to add user:", error);
+              setLoading(false);
+            });
+         
+        }
+
         console.log("user", user);
-        setLoading(false);
+
         // ...
       })
       .catch((error) => {
@@ -127,7 +149,7 @@ const Register = () => {
             type="submit"
             className="w-full px-8 py-3 font-semibold rounded-md dark:bg-violet-600 dark:text-gray-50"
           >
-            Sign Up
+            {isLoading ? "Signing Up..." : "Sign Up"}
           </button>
         </form>
       </div>

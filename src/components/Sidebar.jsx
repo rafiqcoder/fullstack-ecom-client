@@ -50,7 +50,8 @@ const Sidebar = () => {
             <span className="mx-4 font-medium">Dashboard</span>
           </a>
 
-          <a
+          <NavLink
+            to="/dashboard/add-product"
             className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
             href="#"
           >
@@ -76,13 +77,11 @@ const Sidebar = () => {
               />
             </svg>
 
-            <NavLink to="/dashboard/add-product" className="mx-4 font-medium">
-              Add Products
-            </NavLink>
-          </a>
-          <a
+            <span className="mx-4 font-medium">Add Products</span>
+          </NavLink>
+          <NavLink
+            to="/dashboard/all-products"
             className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-            href="#"
           >
             <svg
               className="w-5 h-5"
@@ -106,13 +105,11 @@ const Sidebar = () => {
               />
             </svg>
 
-            <NavLink to="/dashboard/all-products" className="mx-4 font-medium">
-              All Products
-            </NavLink>
-          </a>
-          <a
+            <span className="mx-4 font-medium">All Products</span>
+          </NavLink>
+          <NavLink
+            to="/dashboard/all-orders"
             className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"
-            href="#"
           >
             <svg
               className="w-5 h-5"
@@ -136,10 +133,8 @@ const Sidebar = () => {
               />
             </svg>
 
-            <NavLink to="/dashboard/all-orders" className="mx-4 font-medium">
-              All Orders
-            </NavLink>
-          </a>
+            <span className="mx-4 font-medium">All Orders</span>
+          </NavLink>
 
           <a
             className="flex items-center px-4 py-2 mt-5 text-gray-600 transition-colors duration-300 transform rounded-lg dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-gray-200 hover:text-gray-700"

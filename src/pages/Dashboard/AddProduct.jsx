@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useAddProductMutation } from "../../redux/api/productsApi/productsApi";
 
 const AddProduct = () => {
   const [loading, setLoading] = useState(false);
+  const [addProduct, { isLoading }] = useAddProductMutation();
 
   const {
     register,
@@ -16,7 +18,8 @@ const AddProduct = () => {
     try {
       console.log("Product data:", data);
       // Simulate API call
-      // await addProduct(data).unwrap();
+      const response = await addProduct(data).unwrap();
+      console.log("Product added response:", response);
       alert("Product added successfully!");
       reset();
     } catch (error) {
@@ -27,7 +30,7 @@ const AddProduct = () => {
     }
   };
 
-  if (loading) {
+  if (loading || isLoading) {
     return <div>Loading...</div>;
   }
 
@@ -66,7 +69,7 @@ const AddProduct = () => {
                         message: "Product name must be at least 3 characters",
                       },
                     })}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-lg text-black  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                       errors.name ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter product name"
@@ -97,7 +100,7 @@ const AddProduct = () => {
                         message: "Price must be greater than 0",
                       },
                     })}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-lg text-black  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                       errors.price ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="0.00"
@@ -127,7 +130,7 @@ const AddProduct = () => {
                         message: "Stock cannot be negative",
                       },
                     })}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-lg text-black  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                       errors.stock ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="0"
@@ -157,7 +160,7 @@ const AddProduct = () => {
                         message: "Description must be at least 10 characters",
                       },
                     })}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none ${
+                    className={`w-full px-4 py-3 border rounded-lg text-black  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-none ${
                       errors.description ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter product description..."
@@ -185,7 +188,7 @@ const AddProduct = () => {
                     {...register("image", {
                       required: "Product image URL is required",
                     })}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-lg text-black  focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                       errors.image ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter product image URL"

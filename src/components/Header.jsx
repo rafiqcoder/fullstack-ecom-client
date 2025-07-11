@@ -1,11 +1,14 @@
 import React from "react";
-import { NavLink } from "react-router";
+import { NavLink, useNavigate } from "react-router";
 import { useAuth } from "../hooks/auth";
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase.config";
+import { useLogoutMutation } from "../redux/api/usersApi/usersApi";
 
 const Header = () => {
+  const [logout, { isLoading }] = useLogoutMutation();
   const { user, loading } = useAuth();
+  const navigate = useNavigate();
 
   const Links = [
     { name: "Home", path: "/" },
@@ -21,13 +24,23 @@ const Header = () => {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
+        logout()
+          .unwrap()
+          .then((res) => {
+            console.log("Logout response", res);
+            navigate("/");
+            // Optionally, you can redirect or show a success message
+          })
+          .catch((error) => {
+            console.error("Logout error", error);
+          });
       })
       .catch((error) => {
         // An error happened.
       });
   };
 
-  if (loading) {
+  if (loading || isLoading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="loader"></div>

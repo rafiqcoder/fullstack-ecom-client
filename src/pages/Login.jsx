@@ -25,45 +25,20 @@ const Login = () => {
     setLoading(true);
     signInWithPopup(auth, provider)
       .then((result) => {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        // The signed-in user info.
-        const user = result.user;
-        if (user && user.email) {
-          generateJwt(user.email)
-            .unwrap()
-            .then(({ token }) => {
-              console.log("token from login page", token);
-              // navigate(from, { replace: true });
-              setLoading(false);
-            })
-            .catch((error) => {
-              console.log(error);
-              setLoading(false);
-            });
-          console.log("user", user);
-        } else {
-          console.log("user email not found");
-          setLoading(false);
-        }
-        // IdP data available using getAdditionalUserInfo(result)
-        // ...
+        setLoading(false);
+        navigate(from, { replace: true });
       })
       .catch((error) => {
         // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
         // The email of the user's account used.
         console.log(error);
         setLoading(false);
-        const email = error.customData.email;
         // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
+
         // ...
       });
   };
-  if (loading || isLoading) {
+  if (isLoading || loading) {
     return (
       <div className="flex items-center justify-center h-screen">
         <div className="loader text-white"> Loading</div>

@@ -2,7 +2,7 @@ import { useGetProductsQuery } from "../redux/api/productsApi/productsApi";
 
 const Home = () => {
   const { data, loading, error } = useGetProductsQuery();
-
+  
   if (loading) {
     return <div>loading ..</div>;
   }

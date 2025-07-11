@@ -1,14 +1,13 @@
 // Need to use the React-specific entry point to allow generating React hooks
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
+import { apiSlice } from "../apiSice";
 
 // Define a service using a base URL and expected endpoints
-export const productsApi = createApi({
-  reducerPath: "productsApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/" }),
+export const productsApi = apiSlice.injectEndpoints({
+  overrideExisting: true,
   endpoints: (build) => ({
     getProducts: build.query({
-      query: () => "products"
+      query: () => "products",
     }),
   }),
 });

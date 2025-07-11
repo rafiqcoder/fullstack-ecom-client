@@ -1,8 +1,10 @@
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { auth } from "../../firebase.config";
+import { useGenerateJwtMutation } from "../redux/api/usersApi/usersApi";
 
 export const useAuth = () => {
+  const [generateJwt, { isLoading }] = useGenerateJwtMutation();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -11,13 +13,31 @@ export const useAuth = () => {
       if (user) {
         // User is signed in, see docs for a list of available properties
         // https://firebase.google.com/docs/reference/js/auth.user
-          const uid = user.uid;
+        const uid = user.uid;
         setUser(user);
-        setLoading(false);
+
+        if (user && user.email) {
+          generateJwt(user.email)
+            .unwrap()
+            .then((res) => {
+              console.log("JWT token response", res);
+              
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.log(error);
+              setLoading(false);
+            });
+          console.log("user", user);
+        } else {
+          console.log("user email not found");
+          setLoading(false);
+        }
+
         // ...
       } else {
         // User is signed out
-          // ...
+        // ...
         setUser(null);
         setLoading(false);
       }
@@ -25,7 +45,7 @@ export const useAuth = () => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [generateJwt]);
 
   return { user, loading };
 };

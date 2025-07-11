@@ -1,17 +1,23 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query";
+import { apiSlice } from "../apiSice";
 
-export const usersApi = createApi({
-  reducerPath: "usersApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/" }),
+export const usersApi = apiSlice.injectEndpoints({
+  overrideExisting: true,
   endpoints: (build) => ({
     generateJwt: build.mutation({
       query: (email) => ({
         url: "jwt",
         method: "POST",
-        body: email,
+        body: JSON.stringify({ email }), // Ensure the body is a JSON string
+        // Include cookies in requests
+      }),
+    }),
+    logout: build.mutation({
+      query: () => ({
+        url: "logout",
+        method: "POST",
       }),
     }),
   }),
 });
 
-export const { useGenerateJwtMutation } = usersApi;
+export const { useGenerateJwtMutation, useLogoutMutation } = usersApi;

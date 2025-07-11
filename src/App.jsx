@@ -16,6 +16,8 @@ import DashboardLayout from "./components/Layout/DashboardLayout";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import PrivateRoute from "./PrivateRoute/PrivateRoute";
 import AddProduct from "./pages/Dashboard/AddProduct";
+import AllProducts from "./pages/Dashboard/AllProducts";
+import AllOrders from "./pages/Dashboard/AllOrders";
 
 function App() {
   return (
@@ -40,7 +42,9 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
-          <Route path="add-product" element={<AddProduct />} />
+          <Route path="/dashboard/add-product" element={<AddProduct />} />
+          <Route path="/dashboard/all-products" element={<AllProducts />} />
+          <Route path="/dashboard/all-orders" element={<AllOrders />} />
         </Route>
       </Routes>
     </BrowserRouter>

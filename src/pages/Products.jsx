@@ -1,9 +1,13 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import { useGetProductsQuery } from "../redux/api/productsApi/productsApi";
 import HeroSlider from "../components/HeroSlider";
 
 const Products = () => {
-  const { data: products = [], isLoading, error } = useGetProductsQuery();
+    const { data: products = [], isLoading, error } = useGetProductsQuery();
+    
+    const navigate = useNavigate();
+    
 
   // Products-focused hero slider data
   const heroSlides = [
@@ -90,6 +94,10 @@ const Products = () => {
       category: "Office",
     },
   ];
+  // handle click to redirect to details page
+  const handleRedirect = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   const displayProducts = products.length > 0 ? products : mockProducts;
 
@@ -152,7 +160,8 @@ const Products = () => {
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300"
+                    className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300 cursor-pointer"
+                    onClick={() => handleRedirect(product.id)}
                   />
                   <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2">
                     <svg
@@ -175,7 +184,10 @@ const Products = () => {
                 </div>
 
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h3
+                    className="text-xl font-semibold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors cursor-pointer"
+                    onClick={() => handleRedirect(product.id)}
+                  >
                     {product.name}
                   </h3>
 

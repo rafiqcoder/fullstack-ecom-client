@@ -4,9 +4,12 @@ const CartItem = ({
   item,
   isUpdating,
   removingItemId,
-  onQuantityChange,
+  increament,
+  decreament,
   onRemoveItem,
 }) => {
+  console.log(item);
+
   return (
     <div className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
       {/* Product Image */}
@@ -23,18 +26,16 @@ const CartItem = ({
         <h3 className="text-lg font-semibold text-gray-900 truncate">
           {item.name}
         </h3>
-        <p className="text-sm text-gray-600 mt-1">
-          ${item.price.toFixed(2)} each
-        </p>
+        <p className="text-sm text-gray-600 mt-1">${item?.price} each</p>
         <div className="flex items-center mt-2">
           <span
             className={`text-xs px-2 py-1 rounded-full ${
-              item.inStock
+              item?.inStock
                 ? "bg-green-100 text-green-800"
                 : "bg-red-100 text-red-800"
             }`}
           >
-            {item.inStock ? "In Stock" : "Out of Stock"}
+            {item?.inStock ? "In Stock" : "Out of Stock"}
           </span>
         </div>
       </div>
@@ -43,15 +44,14 @@ const CartItem = ({
       <div className="flex items-center gap-3">
         <div className="flex items-center border border-gray-300 rounded-lg">
           <button
-            onClick={() => onQuantityChange(item.id, item.quantity - 1)}
-            disabled={item.quantity <= 1 || isUpdating}
+            onClick={() => decreament(item._id)}
             className="p-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Decrease quantity"
           >
             <svg
               className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
+              fill="black"
+              stroke="black"
               viewBox="0 0 24 24"
             >
               <path
@@ -66,15 +66,14 @@ const CartItem = ({
             {item.quantity}
           </span>
           <button
-            onClick={() => onQuantityChange(item.id, item.quantity + 1)}
-            disabled={item.quantity >= item.maxQuantity || isUpdating}
+            onClick={() => increament(item._id)}
             className="p-2 hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed"
             title="Increase quantity"
           >
             <svg
               className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
+              fill="black"
+              stroke="black"
               viewBox="0 0 24 24"
             >
               <path

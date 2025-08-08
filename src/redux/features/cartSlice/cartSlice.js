@@ -5,16 +5,39 @@ import { createSlice } from "@reduxjs/toolkit";
 const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    items: [], // Array of cart items
-    totalQuantity: 0, // Total number of items in cart
-    totalAmount: 0, // Total price of all items
+    cart: [], // Array of cart items
+    
   },
   reducers: {
     //  Placeholder reducers - implement these when needed
-    addItemToCart: (state, action) => {},
+    addItemToCart: (state, action) => {
+      const productsData = action.payload;
+      const existingItem = state.cart.find(
+        (item) => item._id === productsData._id
+      );
+      if (existingItem) {
+        // If item exists, update quantity
+        existingItem.quantity += 1;
+      } else {
+        // If item doesn't exist, add to cart
+        state.cart.push({ ...productsData, quantity: 1 });
+      }
+    },
     removeItemFromCart: (state, action) => {},
-
-    updateItemQuantity: (state, action) => {},
+    quantityIncrement: (state, action) => {
+      const itemId = action.payload;
+      const item = state.cart.find((item) => item._id === itemId);
+      if (item && item.quantity) {
+        item.quantity += 1;
+      }
+    },
+    quantityDecrement: (state, action) => {
+      const itemId = action.payload;
+      const item = state.cart.find((item) => item._id === itemId);
+      if (item && item.quantity > 1) {
+        item.quantity -= 1;
+      }
+    },
   },
 });
 
@@ -22,8 +45,8 @@ const cartSlice = createSlice({
 export const {
   addItemToCart,
   removeItemFromCart,
-  clearCart,
-  updateItemQuantity,
+  quantityIncrement,
+  quantityDecrement,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

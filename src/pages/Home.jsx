@@ -3,7 +3,7 @@ import { useGetProductsQuery } from "../redux/api/productsApi/productsApi";
 
 const Home = () => {
   const { data: products = [], isLoading, error } = useGetProductsQuery();
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(null);
 
   // Hero slider data
   const heroSlides = [

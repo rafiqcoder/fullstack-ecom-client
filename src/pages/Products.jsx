@@ -2,13 +2,17 @@ import React from "react";
 import { useNavigate } from "react-router";
 import { useGetProductsQuery } from "../redux/api/productsApi/productsApi";
 import HeroSlider from "../components/HeroSlider";
+import { useDispatch, useSelector } from "react-redux";
+import { addItemToCart } from "../redux/features/cartSlice/cartSlice";
+import toast from "react-hot-toast";
 
 const Products = () => {
-    const { data, isLoading, error } = useGetProductsQuery();
-    
-    const navigate = useNavigate();
-    
+  const { data, isLoading, error } = useGetProductsQuery();
+  const { cart } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
 
+  const navigate = useNavigate();
+  console.log("cart data:", cart);
   // Products-focused hero slider data
   const heroSlides = [
     {
@@ -56,10 +60,16 @@ const Products = () => {
   ];
 
   // Mock products for demonstration if API fails
- 
+
   // handle click to redirect to details page
   const handleRedirect = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleAddtoCart = (product) => {
+    console.log(product);
+    dispatch(addItemToCart(product));
+    toast("Product added to cart");
   };
 
   // const displayProducts = products.length > 0 ? products : mockProducts;
@@ -181,7 +191,10 @@ const Products = () => {
                     <span className="text-2xl font-bold text-blue-600">
                       ${product.price}
                     </span>
-                    <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-md">
+                    <button
+                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transform hover:scale-105 transition-all duration-200 shadow-md"
+                      onClick={() => handleAddtoCart(product)}
+                    >
                       Add to Cart
                     </button>
                   </div>

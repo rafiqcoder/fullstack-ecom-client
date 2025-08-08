@@ -18,6 +18,14 @@ export const productsApi = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ["Product"],
     }),
+    updateProduct: build.mutation({
+      query: ({ id, ...product }) => ({
+        url: `products/${id}`,
+        method: "PATCH",
+        body: JSON.stringify(product), // Ensure the body is a JSON string
+      }),
+      invalidatesTags: ["Product"],
+    }),
     deleteProducts: build.mutation({
       query: (id) => ({
         url: `products/${id}`,
@@ -34,4 +42,5 @@ export const {
   useGetProductsQuery,
   useAddProductMutation,
   useDeleteProductsMutation,
+  useUpdateProductMutation,
 } = productsApi;

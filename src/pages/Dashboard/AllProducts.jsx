@@ -3,10 +3,12 @@ import { useForm } from "react-hook-form";
 import {
   useDeleteProductsMutation,
   useGetProductsQuery,
+  useUpdateProductMutation,
 } from "../../redux/api/productsApi/productsApi";
 
 const AllProducts = () => {
   const { data, isLoading, error } = useGetProductsQuery();
+  const [updateProduct, { isLoading: isUpdating }] = useUpdateProductMutation();
   const [deleteProducts, { isLoading: isDeleting }] =
     useDeleteProductsMutation();
   // Fake products data for teaching CRUD operations
@@ -62,17 +64,19 @@ const AllProducts = () => {
 
   // UPDATE: Submit edited product
   const onEditSubmit = async (data) => {
+    console.log("data on edit", data);
     setLoading(true);
     try {
       // TODO: Replace with actual API call
-      // await updateProduct(editingProduct.id, data);
+      const response = await updateProduct({ id: editingProduct._id, ...data });
+      if (response.data.data.acknowledged) {
+        alert("Product updated successfully!");
+        setIsEditModalOpen(false);
+        setEditingProduct(null);
+        reset();
+      }
 
       // Update local state
-
-      setIsEditModalOpen(false);
-      setEditingProduct(null);
-      reset();
-      alert("Product updated successfully!");
     } catch (error) {
       console.error("Error updating product:", error);
       alert("Failed to update product. Please try again.");
@@ -273,7 +277,7 @@ const AllProducts = () => {
 
             {/* Modal Body */}
             <form onSubmit={handleSubmit(onEditSubmit)} className="p-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-black">
                 {/* Product Name */}
                 <div className="md:col-span-2">
                   <label
@@ -292,7 +296,7 @@ const AllProducts = () => {
                         message: "Product name must be at least 3 characters",
                       },
                     })}
-                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors text-black${
                       errors.name ? "border-red-500" : "border-gray-300"
                     }`}
                     placeholder="Enter product name"
@@ -442,7 +446,7 @@ const AllProducts = () => {
                     loading ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >
-                  {loading ? (
+                  {isUpdating ? (
                     <span className="flex items-center justify-center">
                       <svg
                         className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"

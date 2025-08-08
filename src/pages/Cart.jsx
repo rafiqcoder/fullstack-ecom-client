@@ -2,75 +2,38 @@ import React, { useState } from "react";
 import EmptyCart from "../components/EmptyCart";
 import CartItem from "../components/CartItem";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  quantityDecrement,
+  quantityIncrement,
+} from "../redux/features/cartSlice/cartSlice";
 
 const Cart = () => {
   const navigate = useNavigate();
+  const { cart } = useSelector((state) => state.cart);
 
   const [isUpdating, setIsUpdating] = useState(false);
   const [removingItemId, setRemovingItemId] = useState(null);
-
-  const mockCartItems = [
-    {
-      id: 1,
-      name: "Premium Wireless Headphones",
-      price: 299.99,
-      quantity: 1,
-      image:
-        "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&h=200&fit=crop",
-      inStock: true,
-      maxQuantity: 5,
-    },
-    {
-      id: 2,
-      name: "Smartphone Case",
-      price: 25.99,
-      quantity: 2,
-      image:
-        "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop",
-      inStock: true,
-      maxQuantity: 10,
-    },
-    {
-      id: 3,
-      name: "Bluetooth Speaker",
-      price: 79.99,
-      quantity: 1,
-      image:
-        "https://images.unsplash.com/photo-1608043152269-423dbba4e7e1?w=200&h=200&fit=crop",
-      inStock: false,
-      maxQuantity: 3,
-    },
-    {
-      id: 4,
-      name: "USB-C Cable",
-      price: 19.99,
-      quantity: 3,
-      image:
-        "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=200&h=200&fit=crop",
-      inStock: true,
-      maxQuantity: 15,
-    },
-  ];
+  const dispatch = useDispatch();
+  console.log("cart in  cart page", cart);
 
   //   Cart calculations
-  const subtotal = mockCartItems.reduce(
+  const subtotal = cart.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+  // console.log
   const shipping = subtotal > 100 ? 0 : 9.99; // Free shipping over $100
   const tax = subtotal * 0.08; // 8% tax
   const total = subtotal + shipping + tax;
 
   //   Event handlers (UI only - no real functionality)
-  const handleQuantityChange = (itemId, newQuantity) => {
-    setIsUpdating(true);
-    // Simulate API call delay
-    setTimeout(() => {
-      setIsUpdating(false);
-      alert(`UI Demo: Updated quantity for item ${itemId} to ${newQuantity}`);
-    }, 500);
+  const increament = (itemId) => {
+    dispatch(quantityIncrement(itemId));
   };
-
+  const decreament = (itemId) => {
+    dispatch(quantityDecrement(itemId));
+  };
   const handleRemoveItem = (itemId) => {
     setRemovingItemId(itemId);
     // Simulate API call delay
@@ -96,7 +59,7 @@ const Cart = () => {
   };
 
   //   Empty cart state
-  if (mockCartItems.length === 0) {
+  if (cart.length === 0) {
     return <EmptyCart />;
   }
 
@@ -111,8 +74,8 @@ const Cart = () => {
                 Shopping Cart
               </h1>
               <p className="text-sm text-gray-600 mt-1">
-                {mockCartItems.length}{" "}
-                {mockCartItems.length === 1 ? "item" : "items"} in your cart
+                {cart.length} {cart.length === 1 ? "item" : "items"} in your
+                cart
               </p>
             </div>
             <button
@@ -137,13 +100,14 @@ const Cart = () => {
 
                 {/* Cart Items List */}
                 <div className="space-y-4">
-                  {mockCartItems.map((item) => (
+                  {cart?.map((item) => (
                     <CartItem
-                      key={item.id}
+                      key={item._id}
                       item={item}
                       isUpdating={isUpdating}
                       removingItemId={removingItemId}
-                      onQuantityChange={handleQuantityChange}
+                      increament={increament}
+                      decreament={decreament}
                       onRemoveItem={handleRemoveItem}
                     />
                   ))}
@@ -187,7 +151,7 @@ const Cart = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-gray-600">
-                      Subtotal ({mockCartItems.length} items)
+                      Subtotal ({cart.length} items)
                     </span>
                     <span className="font-medium">${subtotal.toFixed(2)}</span>
                   </div>
